@@ -1,32 +1,33 @@
 #!/bin/bash
 
-echo "##### Iniciando Script #####"
+echo "###### Iniciando Script ######"
 
-# Intalando curl, wget, vscode e docker
-echo "Instalando [curl, wget, gpg]"
-apt update && apt upgrade -y
-apt install curl wget gpg -y
-
-echo "Instalando Repositório do VSCode"
-# Instalando repositório da Microsoft
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" \ 
-    | tee /etc/apt/sources.list.d/vscode.list > /dev/null 
-rm -f packages.microsoft.gpg
+# Atualizando e instalando pacotes essenciais
+echo "# Instalando [curl, wget, gpg, vim, openssh-server] # "
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget gpg vim openssh-server
 
 # Instalando VSCode
-echo "Instalando VSCode"
-apt install apt-transport-https && apt update && apt install code -y
+echo "# Baixando e instalando VSCode #"
+wget -qO code_latest_amd64.deb https://go.microsoft.com/fwlink/?LinkID=760868
+sudo apt install -y ./code_latest_amd64.deb
+rm code_latest_amd64.deb  # Removendo o arquivo após a instalação
 
-# Chamando o script que instala o Docker automaticamente
-# get.docker.com - Script de instalação
-echo "Instalando o Docker via scritp - Fazendo download e instalação"
-curl -fsSl https://get.docker.com | bash
+# Instalando o Docker via script oficial
+echo "# Instalando o Docker via script - Fazendo download e instalação # "
+curl -fsSL https://get.docker.com | sudo bash
 
-# Dando permissões ao nosso usuário para usar o Docker
+# Adicionando o usuário ao grupo docker
 read -p "Nome do usuário: " usuario
 usermod -aG docker "$usuario"
-echo "Usuário $usuario adicionado ao grupo do Docker"
+echo "Usuário [$usuario] adicionado ao grupo do Docker"
 
-echo "##### Script finalizado! #####"
+# Adicionando a jdk
+echo "# Instalando a jdk #"
+apt install default-jdk -y
+
+# Instalando intellij
+echo "# Instalando Intellij #"
+snap install intellij-idea-community --classic
+
+echo "###### Script finalizado! ######"
