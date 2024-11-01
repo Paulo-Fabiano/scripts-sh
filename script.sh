@@ -26,7 +26,7 @@ curl -fsSl https://get.docker.com | bash
 
 # Dando permissões ao nosso usuário para usar o Docker
 read -p "Nome do usuário: " usuario
-usermod -aG dockerqua "$usuario"
+usermod -aG docker "$usuario"
 echo "Usuário $usuario adicionado ao grupo do Docker"
 
 echo "##### Script finalizado! #####"
